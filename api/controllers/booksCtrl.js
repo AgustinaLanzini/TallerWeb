@@ -2,7 +2,7 @@
 const mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
-var booksSchema = new Schema({
+var bookSchema = new Schema({
 	title: String,
 	author: [String],
 	editorial: String,
@@ -32,7 +32,7 @@ module.exports.findMany = function(req,res){
 };
 
 
-module.exports.createBooks = function(req,res){
+module.exports.createBook = function(req,res){
 	if (req.body){
 		Books.create({
 			title: instanceBook.title,
