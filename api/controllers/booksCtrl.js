@@ -1,13 +1,23 @@
 //GET
-module.exports.findMany = function(req,res){
-	//llamar bookSchema.statics.findMany(filter)
-	/*
-	console.log(req.query);
-	res.set('Content-Type', 'application/json');
-	res.status(200);
-	res.send(JSON.stringify({'message': 'Libros enviados'}));
-	*/
+const mongoose = require('mongoose');
+var Schema = mongoose.Schema;
 
+var booksSchema = new Schema({
+	title: String,
+	author: [String],
+	editorial: String,
+	genre: [String],
+	category: [String],
+	pages: Number,
+	year: Number,
+	language: String,
+	saga: String,
+	description: String,
+});
+
+var Books = mongoose.model("Book", bookSchema);
+
+module.exports.findMany = function(req,res){
 	Books.find(req.query, function (err, docs) {
 		if (err){ 
 			res.status(404).json(err).end();
@@ -23,13 +33,6 @@ module.exports.findMany = function(req,res){
 
 
 module.exports.createBooks = function(req,res){
-	//llamar bookSchema.statics.insertMany(req)
-	/*
-	console.log(req.body);
-	res.set('Content-Type', 'application/json');
-	res.status(200);
-	res.send(JSON.stringify({'message': 'Libros agregados'}));
-	*/
 	if (req.body){
 		Books.create({
 			title: instanceBook.title,

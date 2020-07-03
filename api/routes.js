@@ -7,17 +7,17 @@ var ctrlBooks = require('./controllers/booksCtrl');
 
 
 //GET
-router.get('/users/:id', ctrlUsers.findUser);
+router.get('/users/:id', ctrlUsers.findUser); //hay que hacerle un find
 router.get('/books', ctrlBooks.findMany);
 
 //POST
 router.post('/users', ctrlUsers.createUser); 
-router.post('/books', ctrlBooks.createBooks);
+router.post('/books', ctrlBooks.createBook);
 router.post('/users/:id/read/:idbook', ctrlUsers.addBookReadToUser);
 router.post('/users/:id/unread/:idbook', ctrlUsers.addBookUnreadToUser);
 
 //PUT
-router.put('/users/:id/read/:idbook', ctrlUsers.updateBookToUser);
+router.put('/users/:id/read/:idbook', ctrlUsers.updateBookToUser); //updateComment y updateScore
 router.put('/books/:id', ctrlBooks.updateBook);
 
 //DELETE
