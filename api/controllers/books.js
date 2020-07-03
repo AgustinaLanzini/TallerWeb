@@ -39,8 +39,8 @@ bookSchema.statics.insertOne = function(instanceBook){
 }
 
 //Actualiza un atributo de un libro
-bookSchema.methods.update = function(update){
-	bookModel.updateOne({ _id : this._id}, {$set:update}, onUpdateBook);
+bookSchema.statics.update = function(id, update){
+	bookModel.updateOne({ _id : id}, {$set:update}, onUpdateBook);
 }
 
 //Busca libros según un criterio dado
@@ -57,8 +57,8 @@ bookSchema.statics.findMany = function(filter){
 }
 
 //Elimina un libro
-bookSchema.methods.delete = function(){
-	bookModel.deleteOne({ _id : this.id}, onDeleteOneBook);
+bookSchema.statics.delete = function(id){
+	bookModel.deleteOne({ _id : id}, onDeleteOneBook);
 } 
 
 function onInsertManyBook(err){
@@ -108,4 +108,4 @@ function onDeleteOneBook(err){
 	}
 }
 
-module.exports = bookSchema;
+module.exports = mongoose.model("Book", bookSchema);

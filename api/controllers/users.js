@@ -18,32 +18,32 @@ userSchema.statics.insertOne = function(instanceUser){
 
 //Inserta una referencia a un libro y su valoración a la lista de leídos
 //ej. review: {book: "5edd13639a284307015fc4cb", comment: "comentariofdss", score: 3}
-userSchema.methods.insertBookRead = function(review){
-	userModel.updateOne({ _id : this.id}, {$push: {read: review}}, onInsertBookRead);
-	userModel.updateOne({ _id : this.id}, {$pull: {unread: {book: review.book} } }, onDeleteBookUnread);
+userSchema.statics.insertBookRead = function(id, review){
+	userModel.updateOne({ _id : id}, {$push: {read: review}}, onInsertBookRead);
+	userModel.updateOne({ _id : id}, {$pull: {unread: {book: review.book} } }, onDeleteBookUnread);
 }
 
 //Inserta una referencia a un libro a la lista por leer
 //ej. book: {book: "5edd13639a284307015fc4cb"}
-userSchema.methods.insertBookUnread = function(book){
-	userModel.updateOne({ _id : this.id}, {$push: {unread : book}}, onInsertBookRead);
+userSchema.statics.insertBookUnread = function(id, book){
+	userModel.updateOne({ _id : id}, {$push: {unread : book}}, onInsertBookRead);
 }
 
 //Modifica el comentario de un libro leído
-userSchema.methods.updateComment = function(book, review){
-	userModel.updateOne({ _id : this.id, 'read.book': book }, {$set: {'read.$.comment' : review}}, onUpdateComment);
+userSchema.statics.updateComment = function(id, book, review){
+	userModel.updateOne({ _id : id, 'read.book': book }, {$set: {'read.$.comment' : review}}, onUpdateComment);
 }
 
 //Modifica el puntaje de un libro leído
-userSchema.methods.updateScore = function(book, review){
-	userModel.updateOne({ _id : this.id, 'read.book': book }, {$set: {'read.$.score' : review}}, onUpdateScore);
+userSchema.statics.updateScore = function(id, book, review){
+	userModel.updateOne({ _id : id, 'read.book': book }, {$set: {'read.$.score' : review}}, onUpdateScore);
 }
 
 
 //Elimina un libro de la lista por leer.
 //recibe un string de un id
-userSchema.methods.deleteBookUnread = function(book){
-	userModel.updateOne({ _id : this.id}, {$pull: {unread: {book: book} } }, onDeleteBookUnread);
+userSchema.statics.deleteBookUnread = function(id, book){
+	userModel.updateOne({ _id : id}, {$pull: {unread: {book: book} } }, onDeleteBookUnread);
 }
 
 
@@ -92,4 +92,4 @@ function onDeleteBookUnread(err){
 	}
 }
 
-module.exports = userSchema;
+module.exports = mongoose.model("User", userSchema);

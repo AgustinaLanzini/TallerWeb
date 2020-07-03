@@ -1,33 +1,29 @@
 //alumnas: Maylen Dell'Oso y Agustina Lanzini
 var express = require('express');
-//var bodyParser = require('body-parser');
 var app = express();
 
-//app.use(express.json());
-//app.use(express.bodyParser());
-//app.use(require('connect').bodyParser);
-//app.use(express.urlencoded({extended:true}))
+app.use(express.json());
 
-
+//rutas de la api
 var routes = require('./api/routes');
 app.use('/api', routes)
 
-
-
-app.get('/', function(req,res){
-	res.send("Bienvenida, te estaba esperando..");
+//empiezo a escuchar en port 3000
+app.listen(3000, function(err, cb){
+	console.log("Escuchando en el port 3000");
 });
 
-app.listen(3000);
 
+//conexión a la db acá
 
 //esto es lo de la db lo puse aca p ver si andaba no mas
 const mongoose = require('mongoose');
-var Schema = mongoose.Schema;
-var userSchema = require('./api/controllers/usersSchema');
-var bookSchema = require('./api/controllers/booksSchema');
-var bookModel = mongoose.model("Book", bookSchema);
-var userModel = mongoose.model("User", userSchema);
 
 
-console.log("hola");
+//esto no va pq no deberia existir mas
+/*
+var userModel = require('./api/controllers/users');
+var bookModel = require('./api/controllers/books');
+
+*/
+
