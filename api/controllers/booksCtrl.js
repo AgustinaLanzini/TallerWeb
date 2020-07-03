@@ -35,16 +35,16 @@ module.exports.findMany = function(req,res){
 module.exports.createBook = function(req,res){
 	if (req.body){
 		Books.create({
-			title: instanceBook.title,
-			author: instanceBook.author,
-			editorial: instanceBook.editorial,
-			genre: instanceBook.genre,
-			category: instanceBook.category,
-			pages: instanceBook.pages,
-			year: instanceBook.year,
-			language: instanceBook.language,
-			saga: instanceBook.saga,
-			description: instanceBook.description,
+			title: req.body.title,
+			author: req.body.author,
+			editorial: req.body.editorial,
+			genre: req.body.genre,
+			category: req.body.category,
+			pages: req.body.pages,
+			year: req.body.year,
+			language: req.body.language,
+			saga: req.body.saga,
+			description: req.body.description,
 		}, function (err, instance){
 			if (err){
 				res.status(404).json(err).end();
