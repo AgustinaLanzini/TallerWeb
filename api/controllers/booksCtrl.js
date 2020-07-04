@@ -1,4 +1,3 @@
-//GET
 const mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
@@ -17,6 +16,7 @@ var bookSchema = new Schema({
 
 var Books = mongoose.model("Book", bookSchema);
 
+//GET
 module.exports.findMany = function(req,res){
 	Books.find(req.query, function (err, docs) {
 		if (err){ 
@@ -75,7 +75,7 @@ module.exports.updateBook = function(req,res){
 		res.status(404).json({"message": "Book id must be provided"});
 }
 
-
+//DELETE
 module.exports.deleteBook = function(req,res){
 	if (req.params.id){
 		Books.deleteOne({ _id : req.params.id}, function(err, instance){
@@ -83,11 +83,9 @@ module.exports.deleteBook = function(req,res){
 				res.status(404).json(err).end();
 			}
 			else
-				res.status(200).json(instance).end();
+				res.status(202).json(instance).end();
 		});
 	}
 	else
 		res.status(404).json({"message": "Book id must be provided"});
-
-
 }
