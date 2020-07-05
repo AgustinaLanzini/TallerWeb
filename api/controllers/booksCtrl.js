@@ -58,17 +58,36 @@ module.exports.createBook = function(req,res){
 }
 
 module.exports.updateBook = function(req,res){
-	//llamar bookSchema.statics.updateBook(id, req)
-	console.log(req.body);
-	res.set('Content-Type', 'application/json');
-	res.status(200);
-	res.send(JSON.stringify({'message': 'Libro actualizado'}));
+	if (req.params.id){
+		if (req.body){
+			Books.updateOne({ _id : req.params.id}, {$set: req.body}, function(err, instance){
+				if (err){
+					res.status(404).json(err).end();
+				}
+				else
+					res.status(200).json(instance).end();
+			});
+		}
+		else
+			res.status(404).json({"message": "Update must be provided"});
+	}
+	else
+		res.status(404).json({"message": "Book id must be provided"});
 }
 
+
 module.exports.deleteBook = function(req,res){
-	//llamar bookSchema.statics.delete(id)
-	console.log(req.params);
-	res.set('Content-Type', 'application/json');
-	res.status(200);
-	res.send(JSON.stringify({'message': 'Libro eliminado'}));
+	if (req.params.id){
+		Books.deleteOne({ _id : req.params.id}, function(err, instance){
+			if (err){
+				res.status(404).json(err).end();
+			}
+			else
+				res.status(200).json(instance).end();
+		});
+	}
+	else
+		res.status(404).json({"message": "Book id must be provided"});
+
+
 }
