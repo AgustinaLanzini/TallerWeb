@@ -48,52 +48,36 @@ module.exports.createUser = function(req,res){
 module.exports.addBookReadToUser = function(req,res){
 	//debería llamar a userSchema.statics.insertBookRead(id, req.params);
 	if (req.params.id){
-		if (red.params.idbook){
-			if (req.body){
-				Users.updateOne({_id : req.params.id}, {$push: {read: req.body.review} }, function(err, instance){
-					if (err){
-						res.status(404).json(err).end();
-					}
-					else{
-						Users.updateOne({_id : req.params.id}, {$pull: {read: {book: req.params.idbook} } }, function(err, instance){ 
-							if (err){
-								res.status(404).json(err).end();
-							}
-							else
-								res.status(201).json(instance).end();
-						});
-					}
-				});	
-			}
-			else
-				Users.updateOne({_id : req.params.id}, {$push: {book: req.params.idbook}}, function(err, instance){
-					if (err){
-						res.status(404).json(err).end();
-					}
-					else{
-						Users.updateOne({_id : req.params.id}, {$pull: {read: {book: req.params.idbook} } }, function(err, instance){ 
-							if (err){
-								res.status(404).json(err).end();
-							}
-							else
-								res.status(201).json(instance).end();
-						});
-					}
-				});			
+		if (req.params.idbook){
+			aux = req.body;
+			aux.book = req.params.idbook;
+			Users.updateOne({_id : req.params.id}, {$push: {read: req.body}}, function(err, instance){
+				if (err){
+					res.status(404).json(err).end();
+				}
+				else{
+					Users.updateOne({_id : req.params.id}, {$pull: {read: {book: req.params.idbook} } }, function(err, instance){ 
+						if (err){
+							res.status(404).json(err).end();
+						}
+						else
+							res.status(201).json(instance).end();
+					});
+				}
+			});				
 		}
 		else
-			res.status(404).json({"message": "Book id must be provided"});
+			res.status(404).json({"message": "Book id must be provided"}).end();
 	}
 	else
-		res.status(404).json({"message": "User id must be provided"});
+		res.status(404).json({"message": "User id must be provided"}).end();
 	
 }
 
 module.exports.addBookUnreadToUser = function(req,res){
 	//debería llamar a userSchema.statics.insertBookUnread(id, req.params);
-
 	if (req.params.id){
-		if (red.params.idbook){
+		if (req.params.idbook){
 			Users.updateOne({_id : req.params.id}, {$push: {unread: {book: req.params.idbook} } }, function(err, instance){
 				if (err){
 					res.status(404).json(err).end();
@@ -103,52 +87,53 @@ module.exports.addBookUnreadToUser = function(req,res){
 			});
 		}
 		else
-		res.status(404).json({"message": "Book id must be provided"});
+			res.status(404).json({"message": "Book id must be provided"}).end();
 	}
 	else
-		res.status(404).json({"message": "User id must be provided"});
+		res.status(404).json({"message": "User id must be provided"}).end();
 }
 
 module.exports.updateBookToUser = function(req,res){
 	//debería llamar a userSchema.statics.updateComment/Score(id, book, req.params);
 	if (req.params.id){
-		if (red.params.idbook){
-			if (req.body.comment){
-				Users.updateOne({_id : req.params.id, 'read.book': req.params.idbook}, {$set: {'read.$.comment' : req.body.comment}}, function(err, instance){
-					if (err){
-						res.status(404).json(err).end();
-					}
-					else
-						res.status(201).json(instance).end();
-				});
-			}
-			else{
+		if (req.params.idbook){
+			if (req.body){
+				if (req.body.comment){
+					Users.updateOne({_id : req.params.id, 'read.book': req.params.idbook}, {$set: {'read.$.comment' : req.body.comment}}, function(err, instance){
+						if (err){
+							res.status(404).json(err).end();
+							return;
+						}
+						else
+							res.status(201).json(instance);
+					});
+				}
 				if (req.body.score){
 					Users.updateOne({_id : req.params.id, 'read.book': req.params.idbook}, {$set: {'read.$.score' : req.body.score}}, function(err, instance){
 						if (err){
 							res.status(404).json(err).end();
 						}
 						else
-							res.status(201).json(instance).end();
+							res.status(201).json(instance);
 					});
 				}
-				else
-					res.status(404).json({"message": "Review must be provided"});
+				res.send();
 			}
+			else
+				res.status(404).json({"message": "Review must be provided"}).end();
 		}
 		else
-			res.status(404).json({"message": "Book id must be provided"});
+			res.status(404).json({"message": "Book id must be provided"}).end();
 	}
 	else
-		res.status(404).json({"message": "User id must be provided"});
+		res.status(404).json({"message": "User id must be provided"}).end();
 }
 
 //DELETE
 module.exports.deleteBookUnreadToUser = function(req,res){
 	//debería llamar a userSchema.statics.deleteBookUnread(id, book, req.params);
-	
 	if (req.params.id){
-		if (red.params.idbook){
+		if (req.params.idbook){
 			Users.updateOne({_id : req.params.id}, {$pull: {unread: {book: req.params.idbook} } }, function(err, instance){
 				if (err){
 					res.status(404).json(err).end();
@@ -158,8 +143,8 @@ module.exports.deleteBookUnreadToUser = function(req,res){
 			});
 		}
 		else
-		res.status(404).json({"message": "Book id must be provided"});
+		res.status(404).json({"message": "Book id must be provided"}).end();
 	}
 	else
-		res.status(404).json({"message": "User id must be provided"});
+		res.status(404).json({"message": "User id must be provided"}).end();
 }

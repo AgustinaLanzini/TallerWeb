@@ -69,10 +69,10 @@ module.exports.updateBook = function(req,res){
 			});
 		}
 		else
-			res.status(404).json({"message": "Update must be provided"});
+			res.status(404).json({"message": "Update must be provided"}).end();
 	}
 	else
-		res.status(404).json({"message": "Book id must be provided"});
+		res.status(404).json({"message": "Book id must be provided"}).end();
 }
 
 //DELETE
@@ -87,5 +87,5 @@ module.exports.deleteBook = function(req,res){
 		});
 	}
 	else
-		res.status(404).json({"message": "Book id must be provided"});
+		res.status(404).json({"message": "Book id must be provided"}).end();
 }
