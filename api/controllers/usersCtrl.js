@@ -11,7 +11,6 @@ var Users = mongoose.model("User", userSchema);
 
 //GET
 module.exports.findUser = function(req,res){
-	//debería llamar a userSchema.statics.getUser(req.params.id);
 	Users.find(req.query, function (err, docs) {
 		if (err){ 
 			res.status(404).json(err).end();
@@ -27,7 +26,6 @@ module.exports.findUser = function(req,res){
 
 //POST
 module.exports.createUser = function(req,res){
-	//debería llamar a userSchema.statics.insertOne(req.params);
 	if (req.body){
 		Users.create({
 			user: req.body.user,
@@ -46,25 +44,26 @@ module.exports.createUser = function(req,res){
 }
 
 module.exports.addBookReadToUser = function(req,res){
-	//debería llamar a userSchema.statics.insertBookRead(id, req.params);
 	if (req.params.id){
 		if (req.params.idbook){
 			aux = req.body;
 			aux.book = req.params.idbook;
-			Users.updateOne({_id : req.params.id}, {$push: {read: req.body}}, function(err, instance){
+			console.log(aux);
+			Users.updateOne({_id : req.params.id}, {$push: {read: aux}}, function(err, instance){
+				console.log(instance);
 				if (err){
 					res.status(404).json(err).end();
 				}
 				else{
-					Users.updateOne({_id : req.params.id}, {$pull: {read: {book: req.params.idbook} } }, function(err, instance){ 
+					Users.updateOne({_id : req.params.id}, {$pull: {unread: {book: req.params.idbook} } }, function(err, instance){
 						if (err){
 							res.status(404).json(err).end();
 						}
 						else
-							res.status(201).json(instance).end();
+							res.status(202).json(instance).end();
 					});
 				}
-			});				
+			});			
 		}
 		else
 			res.status(404).json({"message": "Book id must be provided"}).end();
@@ -75,7 +74,6 @@ module.exports.addBookReadToUser = function(req,res){
 }
 
 module.exports.addBookUnreadToUser = function(req,res){
-	//debería llamar a userSchema.statics.insertBookUnread(id, req.params);
 	if (req.params.id){
 		if (req.params.idbook){
 			Users.updateOne({_id : req.params.id}, {$push: {unread: {book: req.params.idbook} } }, function(err, instance){
@@ -94,7 +92,6 @@ module.exports.addBookUnreadToUser = function(req,res){
 }
 
 module.exports.updateBookToUser = function(req,res){
-	//debería llamar a userSchema.statics.updateComment/Score(id, book, req.params);
 	if (req.params.id){
 		if (req.params.idbook){
 			if (req.body){
@@ -102,22 +99,33 @@ module.exports.updateBookToUser = function(req,res){
 					Users.updateOne({_id : req.params.id, 'read.book': req.params.idbook}, {$set: {'read.$.comment' : req.body.comment}}, function(err, instance){
 						if (err){
 							res.status(404).json(err).end();
-							return;
 						}
-						else
-							res.status(201).json(instance);
+						else{
+							if (req.body.score){
+								Users.updateOne({_id : req.params.id, 'read.book': req.params.idbook}, {$set: {'read.$.score' : req.body.score}}, function(err, instance){
+									if (err){
+										res.status(404).json(err).end();
+									}
+									else
+										res.status(201).json(instance).end();
+							});
+							}
+							else
+								res.status(201).json(instance).end();
+						}
 					});
 				}
-				if (req.body.score){
-					Users.updateOne({_id : req.params.id, 'read.book': req.params.idbook}, {$set: {'read.$.score' : req.body.score}}, function(err, instance){
-						if (err){
-							res.status(404).json(err).end();
-						}
-						else
-							res.status(201).json(instance);
-					});
-				}
-				res.send();
+				else
+					if (req.body.score){
+								Users.updateOne({_id : req.params.id, 'read.book': req.params.idbook}, {$set: {'read.$.score' : req.body.score}}, function(err, instance){
+									if (err){
+										res.status(404).json(err).end();
+									}
+									else
+										res.status(201).json(instance).end();
+							});
+					}
+
 			}
 			else
 				res.status(404).json({"message": "Review must be provided"}).end();
@@ -131,7 +139,6 @@ module.exports.updateBookToUser = function(req,res){
 
 //DELETE
 module.exports.deleteBookUnreadToUser = function(req,res){
-	//debería llamar a userSchema.statics.deleteBookUnread(id, book, req.params);
 	if (req.params.id){
 		if (req.params.idbook){
 			Users.updateOne({_id : req.params.id}, {$pull: {unread: {book: req.params.idbook} } }, function(err, instance){

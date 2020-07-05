@@ -7,7 +7,7 @@ var ctrlBooks = require('./controllers/booksCtrl');
 
 
 //GET
-router.get('/users/:id', ctrlUsers.findUser); //hay que hacerle un find
+router.get('/users', ctrlUsers.findUser); 
 router.get('/books', ctrlBooks.findMany);
 
 //POST
@@ -17,7 +17,7 @@ router.post('/users/:id/read/:idbook', ctrlUsers.addBookReadToUser);
 router.post('/users/:id/unread/:idbook', ctrlUsers.addBookUnreadToUser);
 
 //PUT
-router.put('/users/:id/read/:idbook', ctrlUsers.updateBookToUser); //updateComment y updateScore
+router.put('/users/:id/read/:idbook', ctrlUsers.updateBookToUser);
 router.put('/books/:id', ctrlBooks.updateBook);
 
 //DELETE
