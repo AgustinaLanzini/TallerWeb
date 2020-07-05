@@ -48,9 +48,7 @@ module.exports.addBookReadToUser = function(req,res){
 		if (req.params.idbook){
 			aux = req.body;
 			aux.book = req.params.idbook;
-			console.log(aux);
 			Users.updateOne({_id : req.params.id}, {$push: {read: aux}}, function(err, instance){
-				console.log(instance);
 				if (err){
 					res.status(404).json(err).end();
 				}
